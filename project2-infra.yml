@@ -191,44 +191,6 @@ Resources:
         Properties:
             RouteTableId: !Ref PrivateRouteTable2
             SubnetId: !Ref PrivateSubnet2
-  UdacityS3ReadOnlyEC2:
-        Type: AWS::IAM::Role
-        Properties:
-            RoleName:  !Sub ${EnvironmentName}-Role
-            AssumeRolePolicyDocument:
-                Version: "2012-10-17"
-                Statement:
-                -   Effect: Allow
-                    Principal:
-                        Service:
-                        - ec2.amazonaws.com
-                    Action:
-                    - sts:AssumeRole
-            Path: "/"
-  RolePolicies:
-        Type: AWS::IAM::Policy
-        Properties:
-            PolicyName: AmazonS3ReadOnlyAccess
-            PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                - 
-                    Effect: Allow
-                    Action: 
-                    -   s3:Get*
-                    -   s3:List*
-                    Resource: 
-                    -   arn:aws:s3:::udacity-demo-1
-                    -   arn:aws:s3:::udacity-demo-1/*
-            Roles:
-            -   Ref: UdacityS3ReadOnlyEC2
-
-  ProfileWithRolesForOurApp:
-        Type: AWS::IAM::InstanceProfile
-        Properties:
-            Path: "/"
-            Roles:
-            - Ref: UdacityS3ReadOnlyEC2
 
 Outputs: 
 
@@ -291,9 +253,3 @@ Outputs:
         Value: !Ref PrivateSubnet2
         Export:
           Name: !Sub ${EnvironmentName}-PRI2-SN
-
-    ProfileWithRolesForOurApp: 
-        Description: A reference to the Profile With Roles For Our App
-        Value: !Ref ProfileWithRolesForOurApp
-        Export:
-          Name: !Sub ProfileWithRolesFor-${EnvironmentName}
